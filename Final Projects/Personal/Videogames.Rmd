@@ -1,0 +1,917 @@
+---
+title: ""
+date: ""
+header-includes:
+- \usepackage[utf8]{inputenc}
+- \usepackage[english]{babel}
+- \usepackage{graphicx}
+- \usepackage{multirow,rotating}
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \usepackage{LastPage}
+- \usepackage{amsmath}
+- \usepackage{url}
+- \usepackage{hyperref}
+- \usepackage{imakeidx}
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    includes:
+      in_header: labels.tex
+      before_body: cover.tex
+always_allow_html: true
+csl: apa.csl
+bibliography: fuentesML.bib
+---
+
+\newpage
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{=tex}
+\lhead{Professional Certificate in Data Science}
+\chead{}
+\lfoot{Marco Méndez Atienza}
+\cfoot{\today}
+\rfoot{Page \thepage ~of~ \pageref{LastPage}}
+
+\renewcommand{\headrulewidth}{0.4pt}
+
+\renewcommand{\footrulewidth}{0.4pt}
+```
+
+# Required packages {-}
+
+```{r message=FALSE, warning=FALSE}
+
+if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(caret)) install.packages("caret", repos = "http://cran.us.r-project.org")
+if(!require(data.table)) install.packages("data.table", repos = "http://cran.us.r-project.org")
+if(!require(ggthemes)) install.packages("ggthemes", repos = "http://cran.us.r-project.org")
+if(!require(ggrepel)) install.packages("ggrepel", repos = "http://cran.us.r-project.org")
+if(!require(viridis)) install.packages("viridis", repos = "http://cran.us.r-project.org")
+if(!require(RColorBrewer)) install.packages("RColorBrewer", repos = "http://cran.us.r-project.org")
+if(!require(lubridate)) install.packages("lubridate", repos = "http://cran.us.r-project.org")
+if(!require(ggmosaic)) install.packages("ggmosaic", repos = "http://cran.us.r-project.org")
+if(!require(readr)) install.packages("readr", repos = "http://cran.us.r-project.org")
+if(!require(stargazer)) install.packages("stargazer", repos = "http://cran.us.r-project.org")
+
+library(tidyverse)
+library(caret)
+library(data.table)
+library(ggthemes)
+library(ggrepel)
+library(viridis)
+library(RColorBrewer)
+library(lubridate)
+library(ggmosaic)
+library(stargazer)
+
+```
+
+\newpage
+
+# Introduction
+
+The video games are a billionaire industry that has been around for many years. Since the first games were published around the 1970s, they have come a long way to have hyper realistic graphics and huge entire worlds inside them.
+
+According to Statista [@statista], the revenue for this industry in 2020 was estimated to be almost 37 billion USD.Compared to previous years, now the generation of game consumers has a significant larger spending power; contrary to what was believed, games are no longer exclusive for children, they top the preferences of many people across generations,
+
+To give some insights about the current context of game industry, consider the following facts:
+
+- The most successful public companies in terms of gaming revenue are Tencent, Sony and Apple.
+
+- PlayStation 4 was the best seller of the past generation consoles.
+
+- The favorite genres in 2020 were action, strategy and adventure.
+
+- The most popular store for hard copy games was GameStop, while Amazon was the most popular for digital purchases.
+
+- It is estimated that around 18% of adults spend 6 or more hours per week playing video games.
+
+
+The succinct introduction is sufficient to justify a statistical and econometric analysis for the available data of this industry. For the objectives of this report, a public data set was used; specifically, one provided by the website Kaggle, which overall description can be found [**here**](https://www.kaggle.com/gregorut/videogamesales). Effectively, this data set contains information about video game sales and ratings (given by users and critics) from 1980 to 2017.
+
+It is sensible to assume that games rating directly affect their commercial success. Nonetheless, it is possible to obtain much deeper insights regarding other variables.
+
+Thus, the following pages answer the following questions:
+
+1. How does different types of game ratings (users and critics) correlate between each other?
+
+The hypothesis for this question is that both ratings behave similarly and do not display major dissonances between each other.
+
+2. Does the commercial success of games is positively correlated with the ratings given by users and critics?
+
+For this question, the hypothesis is that, in general, ratings positively and clearly explain the units sold of games.
+
+The rest of the report is divided in three parts:
+
+1. Exploratory Data Analysis: meaningful and useful descriptive statistics are presented to gain insights about the distributions and tendencies of video game sales.
+
+2. Linear Models: simple linear models are fitted to display the relationships between different facets of ratings and sales, which provide interesting and surprising results in several cases.
+
+3. Conclusion: the most relevant and pertinent results are summarized and compared to the hypothesis raised.
+
+
+\newpage
+
+# Exploratory Data Analysis
+
+The data set can be found in the following path:
+
+```{r message=FALSE, warning=FALSE}
+
+library(readr)
+
+videogames <- read_csv("videogames.csv")
+
+```
+
+
+```{r}
+
+head(videogames)
+
+```
+
+As we can see, some string values are "N/A", so lets replace them:
+
+```{r}
+
+videogames[videogames == "N/A"] <- NA
+
+```
+
+
+First of all, lets describe the variables the data set includes:
+
+```{r}
+
+names(videogames)
+
+```
+
+- "Name": Name of the game
+
+- "Platform": Console on which the game is running
+
+- "Year_of_Release": Year of the game released
+
+- "Genre": Game's category
+
+- "Publisher": Publisher
+
+- "NA_Sales": Games sales in North America (in millions of units)
+
+- "EU_Sales": Games sales in the European Union (in millions of units)
+
+- "JP_Sales": Games sales in Japan (in millions of units)
+
+- "Other_sales": Games sales in the rest of the world, i.e. Africa, Asia excluding Japan, Australia, Europa excluding the EU, and Latin America (in millions of units)
+
+- "Global_sales": Total sales in the world (in millions of units)
+
+- "Critic_Score": Aggregate score compiled by Metacritic staff
+
+- "Critic_Count": The number of critics used in coming up with the Critic_Score
+
+- "User_Score": Score by Metacritic's subscribers
+
+- "User_Count": Number of users who gave the User_Score
+
+- "Developer": Party responsible for creating the game}
+
+- "Rating": The ESRB rating (e.g. Everyone, Teens, Adults, etc.)
+
+Additionally, this data set contains information for 16 719 observations and 16 different variables:
+
+```{r}
+
+dim(videogames)
+
+```
+
+Lets perform some exploratory data analysis for each variable in order to obtain some meaningful insights about the data. In the following pages, the games in the data set will be referred as "published games", regardless of not including some other known games. Also, consider that one relevant variable is year: this data set covers information from 1980 to 2017, effectively.
+
+First, notice that some games were released in multiple platforms (e.g. 007: Quantum of Solace was released in PC, DS, PS2, Wii, PS3 and XBox 360); thus, it is useful to know how many unique games the data set includes:
+
+```{r}
+
+length(unique(videogames$Name))
+
+```
+
+Lets now focus on the platform, genre and publisher: PS2 and DS are the platforms with the most published games (more than 2 000) within the aforementioned time interval, while NES, DC, GEN, NG, SCD, WS, 3DO, TG18, GG and PCFX have all less than 100 published games.
+
+```{r}
+
+table(videogames$Platform)
+  
+```
+
+The following graph shows number of games released by platform, in decreasing order:
+
+```{r}
+
+videogames %>% 
+  ggplot(aes(x = reorder(Platform, Platform, function(x) - length(x)))) +
+  geom_bar(fill = "lightgoldenrod3") +
+  labs(title = "Figure 2.1. Published games by platform, \n 1980-2017", 
+       y = "Number of games published", 
+       x = "Platform", 
+       caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1), plot.caption = element_text(hjust= 0))
+  
+```
+
+Consider now the game genre. "Action" appears to be, by far, the most common genre in videogames, followed by sports and Misc, while Fighting, Strategy and Puzzle are the least commons.
+
+```{r}
+
+table(videogames$Genre)
+
+```
+
+We can graphically see that in the follwing plot:
+
+
+```{r}
+
+videogames %>% 
+  ggplot(aes(x = reorder(Genre, Genre, function(x) - length(x)))) +
+  geom_bar(fill = "#00BCD4") +
+  labs(title = "Figure 2.2. Published games by genre, \n 1980-2017", 
+       y = "Number of games published", 
+       x = "Genre", 
+       caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1), plot.caption = element_text(hjust= 0))
+
+```
+
+Another pertinent insight is to look at the number of games published by publisher. Firstly, there are 581 different publishers in the data set, a rather big figure.
+
+```{r}
+
+length(unique(videogames$Publisher))
+
+
+```
+
+For purposes of plotting, the following graph shows the number of games published by Publisher just for the ones with more that 25 games. Not surprisingly, EA, Activision, Ubisoft and Konami are among the top publishers in this period:
+
+```{r}
+
+videogames %>%
+  group_by(Publisher) %>% 
+  filter(n() >= 50 & !is.na(Publisher)) %>%
+  mutate(Publisher = recode(Publisher,
+                            'Electronic Arts' = "EA",
+                            'Namco Bandai Games' = "Namco",
+                            'Konami Digital Entertainment' = "Konami",
+                            'Sony Computer Entertainment' = "Sony",
+                            'Take-Two Interactive' = "Take-Two",
+                            'Warner Bros. Interactive Entertainment' = "Warner Bros.",
+                            'Disney Interactive Studios' = "Disney",
+                            'Eidos Interactive' = "Eidos",
+                            'Midway Games' = "Midway",
+                            'Microsoft Game Studios' = "Microsoft",
+                            'Acclaim Entertainment' = "Acclaim",
+                            'Vivendi Games' = "Vivendi",
+                            'Nippon Ichi Software' = "Nippon Ichi",
+                            'Zoo Digital Publishing' = "Zoo",
+                            'Majesco Entertainment' = "Majesco",
+                            'Rising Star Games' = "Rising Star",
+                            'Bethesda Softworks' = "Bethesda",
+                            'Crave Entertainment' = "Crave",
+                            'Virgin Interactive' = "Virgin",
+                            'Focus Home Interactive' = "Focus Home",
+                            'Ignition Entertainment' = "Ignition",
+                            'Marvelous Interactive' = "Marvelous",
+                            'Empire Interactive' = "Empire",
+                            'Kadokawa Shoten' = "Kadokawa")) %>% 
+  ggplot(aes(x = reorder(Publisher, Publisher, function(x) - length(x)))) +
+  geom_bar(fill = "#AD1457") +
+  scale_y_continuous(breaks = c(seq(0, 1500, 250))) +
+  labs(title = "Figure 2.3. Published games by publisher, \n 1980-2017", 
+       y = "Number of games published", 
+       x = "Publisher", 
+       caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1), plot.caption = element_text(hjust= 0))
+
+```
+
+Giving those insights, one can plot the games published both by platform and by genre:
+
+```{r}
+
+videogames %>% 
+  ggplot(aes(x = reorder(Platform, Platform, function(x) - length(x)), fill = Genre)) +
+  geom_bar(color = "black", size = 0.1) +
+  labs(title = "Figure 2.4. Published games by platform and genre, \n 1980-2017", 
+       y = "Number of games published", 
+       x = "Platform", 
+       caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text.x = element_text(angle = 65, hjust = 0), plot.caption = element_text(hjust= 0))
+
+```
+
+In general, there is no clear pattern of a platform with a tendency to publish more or less specific genres. Does this hold for publishers and genres?
+
+```{r}
+
+videogames %>%
+  group_by(Publisher) %>% 
+  filter(n() >= 50 & !is.na(Publisher)) %>%
+  mutate(Publisher = recode(Publisher,
+                            'Electronic Arts' = "EA",
+                            'Namco Bandai Games' = "Namco",
+                            'Konami Digital Entertainment' = "Konami",
+                            'Sony Computer Entertainment' = "Sony",
+                            'Take-Two Interactive' = "Take-Two",
+                            'Warner Bros. Interactive Entertainment' = "Warner Bros.",
+                            'Disney Interactive Studios' = "Disney",
+                            'Eidos Interactive' = "Eidos",
+                            'Midway Games' = "Midway",
+                            'Microsoft Game Studios' = "Microsoft",
+                            'Acclaim Entertainment' = "Acclaim",
+                            'Vivendi Games' = "Vivendi",
+                            'Nippon Ichi Software' = "Nippon Ichi",
+                            'Zoo Digital Publishing' = "Zoo",
+                            'Majesco Entertainment' = "Majesco",
+                            'Rising Star Games' = "Rising Star",
+                            'Bethesda Softworks' = "Bethesda",
+                            'Crave Entertainment' = "Crave",
+                            'Virgin Interactive' = "Virgin",
+                            'Focus Home Interactive' = "Focus Home",
+                            'Ignition Entertainment' = "Ignition",
+                            'Marvelous Interactive' = "Marvelous",
+                            'Empire Interactive' = "Empire",
+                            'Kadokawa Shoten' = "Kadokawa")) %>% 
+  ggplot(aes(x = reorder(Publisher, Publisher, function(x) - length(x)), fill = Genre)) +
+  geom_bar(color = "black", size=0.1) +
+  scale_y_continuous(breaks = c(seq(0, 1500, 250))) +
+  labs(title = "Figure 2.5. Published games by publisher and genre, \n 1980-2017", 
+       y = "Number of games published", 
+       x = "Publisher", 
+       caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1), plot.caption = element_text(hjust= 0))
+
+```
+
+Here, there are some publishers that tend to publish certain genres. For example, EA and Konami have a lot of sports games; Activision and Namco have a good amount of action games; the majority of Warner Bros. games are action ones; Idea Factory almost only publishes adventure games.
+
+The next set of variables worth noticing is the sales; as it is clear, North America is the Region with more units sold during this period:
+
+```{r}
+
+# for the next graph and the next analysis, the data set was modified as follows
+
+videogames1 <- videogames %>%
+#drop NAs
+  drop_na() %>%
+#drop columns that won't be used
+  select(-Critic_Count, -User_Count) %>%
+#rename "Years"
+  rename(Year = Year_of_Release) %>%
+# coerce variables as correct objects
+  mutate(Platform = as.factor(Platform),
+         Genre = as.factor(Genre),
+         Publisher = as.factor(Publisher),
+         Developer = as.factor(Developer),
+         Rating = as.factor(Rating),
+         User_Score = as.numeric(User_Score) * 10)
+
+#filter blank ratings and developers
+videogames1 <- videogames1 %>%
+  filter(Rating != "" & Developer != "")
+  
+videogames1 <- videogames1 %>% 
+# correctly rename Sales
+  pivot_longer(cols = ends_with("Sales"),
+                                 names_to = "Region", values_to = "Units_Sold")
+
+# rename NA region
+videogames1$Region = gsub("NA_Sales", "North America", videogames1$Region)
+
+# consolidate Sales
+videogames1$Region = gsub("_Sales", "", videogames1$Region)
+
+```
+
+
+```{r}
+
+videogames1 %>% 
+  filter(Region != "Global") %>% 
+  ggplot(aes(reorder(Region, -Units_Sold), y = Units_Sold)) +
+  geom_bar(aes(fill = Region), stat = "identity") +
+  labs(x = "Global Region", 
+       y = "Units Sold (in millions)", 
+       title = "Figure 2.6. Units sold (in millions), 1980-2016",
+       caption = "Source: Own elaboration based on the data 'videogames' from kaggle") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank()) +
+  theme(plot.title = element_text(hjust = 1), plot.caption = element_text(hjust= 0))
+  
+
+```
+
+But how does this composition changed over time? The next graph shows the composition of games sales by region. It is clear that in the last 20 years, North America is the region with the largest volume of sales, followed by the European Union. Despite being a small proportion of total sales, other regions have increased their participation as seen below:
+
+Another relevant question is to ask how the sales are distributed by genre within each region? The next couple of graphs show how Europe and North America disproportionately prefer Sports and Shooter games over other regions. On the other hand, Japanese user prefer Role-Playing games, while the rest of the world likes action more.
+
+```{r}
+
+videogames1 %>% 
+  filter(Region != "Global") %>% 
+  ggplot() +
+  geom_mosaic(aes(product(Genre, Region),
+                  fill = Genre, weight = Units_Sold)) +
+  labs(x = "Region", y = "Genre", 
+       title = "Figure 2.7. Composition of regional sales by genre, \n 1980-2017",
+       caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust= 0))
+
+```
+
+```{r}
+
+videogames1 %>%
+  filter(Region != "Global_Sales") %>%
+  ggplot(aes(x = Genre, y = Units_Sold)) +
+  geom_bar(aes(fill = Region), stat = "identity", position = "fill") +
+  ylab("Proportion of units sold") +
+  coord_flip() +
+  labs(title = "Figure 2.8. Proportion of units sold by genre and region, \n 1980, 2017", 
+       caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust= 0))
+
+```
+
+\newpage
+
+# Linear Regression Models
+
+## User and Critic Scores
+
+In this section, the relationship between user and critics scores and sales is analyzed. Firstly, lets observe how both scores are related. One could think that they will have a pretty high correlation. If we fit a model to explain the User Score with the Critic Score, the following results are obtained:
+
+```{r results = 'asis', echo = FALSE, message=FALSE, warning=FALSE}
+
+fit1 <- videogames1 %>% 
+  lm(User_Score ~ Critic_Score, data =.)
+
+stargazer(fit1,  
+          title= "Table 3.1. Linear model, User Score vs. Critic Score",
+          column.labels = c(""),
+          header = FALSE,
+          font.size = "footnotesize",
+          dep.var.caption = "",
+          dep.var.labels = "User Score",
+          covariate.labels = "Critic Score",
+          notes.label = "Significance Value (P-value)",
+          type="latex",
+          table.placement = "!htbp",
+          
+          single.row = T)
+
+```
+
+These results imply the following estimated model:
+
+$$
+\hat{User Score} = 29.515 + 0.603CriticScore + \varepsilon
+$$
+
+This means that the Critic Score is highly significant to explain the behavior of the User Score, with a significance level of 99%. Additionally, the standard error is very small. Lets now compute the inverse relationship: explain Critic Score by USer Score:
+
+```{r results = 'asis', echo = FALSE, message=FALSE, warning=FALSE}
+
+fit2 <- videogames1 %>% 
+  lm(Critic_Score ~ User_Score, data =.)
+
+stargazer(fit2,  
+          title= "Table 3.2. Linear model, Critic Score vs. User Score",
+          column.labels = c(""),
+          header = FALSE,
+          font.size = "footnotesize",
+          dep.var.caption = "",
+          dep.var.labels = "Critic Score",
+          covariate.labels = "User Score",
+          notes.label = "Significance Value (P-value)",
+          type="latex",
+          table.placement = "!htbp",
+          
+          single.row = T)
+
+```
+
+Which implies:
+
+$$
+\hat{Critic Score} = 30.110 + 0.559UserScore + \varepsilon
+$$
+
+Not surprisingly, the results are highly similar to the previous ones. Thus, when addressing the relationship between both scores, it is sensible to assure a strong association and correlation between the two variables (note also that the $R^2$ is relatively substantial and should not be disregarded. 
+
+Nonetheless, the aforementioned models are somehow naive. It would be better to analyze the relationship adding another element of variable. Because our exploratory data analysis suggested interesting patterns within genres, lets facet the linear model with this variable:
+
+
+```{r message=FALSE, warning=FALSE}
+
+videogames1 %>%
+  filter(Region == "Global") %>% 
+  ggplot(aes(x = User_Score, y = Critic_Score)) + 
+    geom_point(size = 0.5) + 
+    geom_smooth(aes(color = Genre), method = lm, se = FALSE) + 
+    facet_wrap(~ Genre) +
+    xlab("User Score") + 
+    ylab("Critic Score") +
+    theme_minimal() +
+    labs(title = "Figure 3.1. Linear models User Scores vs. Critic Score, \n by genre",
+         caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+    theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust= 0))
+    
+
+```
+
+The results above strengthen the assertion of a strong positive relationship between both scores. Despite this, it is clear that the relationship varies across genres. It can be seen that, for example, Simulation and Strategy games have a weaker relationship between score than adventure and puzzle ones. 
+
+Concluding this analysis, one can say that higher user scores are correlated with higher critic scores, and viceversa. Although this correlation varies across genres, it is consistent and always positive.
+
+\newpage
+
+## User/Critic Scores by Genre and Publisher
+
+Now lets fit the same model but faceting by publishers with more than 500 games pudblished:
+
+
+```{r message=FALSE, warning=FALSE}
+
+videogames1 %>%
+  group_by(Publisher) %>% 
+  mutate(Publisher = recode(Publisher,
+                            'Electronic Arts' = "EA",
+                            'Namco Bandai Games' = "Namco",
+                            'Take-Two Interactive' = "Take-Two",
+                            'Konami Digital Entertainment' = "Konami",
+                            'Sony Computer Entertainment' = "Sony",
+                            'Warner Bros. Interactive Entertainment' = "Warner Bros.",
+                            'Eidos Interactive' = "Eidos",
+                            'Midway Games' = "Midway",
+                            'Microsoft Game Studios' = "Microsoft",
+                            'Vivendi Games' = "Vivendi")) %>% 
+  filter(n() >= 500 & Region == "Global" ) %>% 
+  ggplot(aes(x = User_Score, y = Critic_Score)) + 
+    geom_point(size = 0.5) + 
+    geom_smooth(aes(color = Genre), method = lm, se = FALSE) + 
+    facet_wrap(~ Publisher) +
+    xlab("User Score") + 
+    ylab("Critic Score") +
+    theme_minimal() +
+    labs(title = "Figure 3.2. Linear models User Scores vs. Critic Score, \n by genre and publisher",
+         caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+    theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust= 0))
+
+```
+
+Now, the relationships are very broad, so consider the following cases:
+
+1. Publishers with all/almost all correlations clearly positives. Publishers like Codemasters, Konami, Microsoft, Sony, Take-Two, Ubisoft and Vivendi show a strong relationship between user and score critics across all genres.
+
+2. Publishers with clearly some genres with much weaker correlations. Activision, Atari, Eidos, EA, Midway, Namco, Nintendo and Sega clearly show at least one weak relationship between both scores, suggesting that these genres may have lower User Scores that do not explain the Critic Score behavior. Nonetheles, the aggregate of all genres still shows a strong positive correlation.
+
+3. Publishers with weak overall correlations. Capcom, Square Enix, Tecmo Koei, THQ and Warner Bros. are publishers whose relationships between scores are pretty weak. Despite showing some positive correlations in some genres, the aggregated behavior is messier.
+
+\newpage
+
+## User/Critic Scores by Genre and Platform
+
+The following graphs replicate the procedure above but faceting by platform:
+
+
+```{r message=FALSE, warning=FALSE}
+
+videogames1 %>%
+  filter(Region == "Global") %>% 
+  ggplot(aes(x = User_Score, y = Critic_Score)) + 
+    geom_point(size = 0.5) + 
+    geom_smooth(aes(color = Genre), method = lm, se = FALSE) + 
+    facet_wrap(~ Platform) +
+    xlab("User Score") + 
+    ylab("Critic Score") +
+    theme_minimal() +
+    labs(title = "Figure 3.3. Linear models User Scores vs. Critic Score, \n by genre and platform",
+         caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+    theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust= 0))
+
+
+```
+
+Again, some different patterns are clear: firstly, platform DC has too few games so a proper analysis can be made; second, almost all platforms show explicit and strong correlations between scores; finally, both WiiU and XBox One have somehow messier correlations, where some genres show very weak correlations. However, in general, all platforms (except DC) clearly positive aggregated relationships.
+
+\newpage
+
+## User/Critic Scores and Units Sold
+
+Perhaps the most relevant insight from the data is to study the relationship between scores and sales. One could argue that higher User/Critic scores will lead to higher sales for any game. Firstly, lets fit two aggregated models that accounts for sales and User/Critic scores:
+
+```{r results = 'asis', echo = FALSE, message=FALSE, warning=FALSE}
+
+
+fit3 <- videogames1 %>% 
+  lm(Units_Sold ~ User_Score, data =.)
+
+stargazer(fit3,  
+          title= "Table 3.3. Linear model, Units Sold vs. User Score",
+          column.labels = c(""),
+          header = FALSE,
+          font.size = "footnotesize",
+          dep.var.caption = "",
+          dep.var.labels = "Units Sold",
+          covariate.labels = "User Score",
+          notes.label = "Significance Value (P-value)",
+          type="latex",
+          table.placement = "!htbp",
+          
+          single.row = T)
+
+```
+
+
+Which implies a model:
+
+$$
+\hat{Units Sold} = -0.035 + 0.005UserScore + \varepsilon
+$$
+
+
+The table above could appear surprising, since it suggests that user scores do not explain almost anything of the units sold: despite being highly significant (at a 99% level) the coefficient and the $R^2$ are way too low to assure that our predictor is in fact significant for our dependent variable.
+
+Nevertheless, it is important to consider the following: user scores are sometimes made long time after the games are released, so the units sold do not clearly occur after user scores. Lets examine the opposite relationship: explain the user score with the units sold:
+
+```{r results = 'asis', echo = FALSE, message=FALSE, warning=FALSE}
+
+
+fit4 <- videogames1 %>% 
+  lm(User_Score ~ Units_Sold, data =.)
+
+stargazer(fit4,  
+          title= "Table 3.4. Linear model, User Score vs. Units Sold",
+          column.labels = c(""),
+          header = FALSE,
+          font.size = "footnotesize",
+          dep.var.caption = "",
+          dep.var.labels = "User Score",
+          covariate.labels = "Units Sold",
+          notes.label = "Significance Value (P-value)",
+          type="latex",
+          table.placement = "!htbp",
+          
+          single.row = T)
+
+
+```
+
+This table implies the next model:
+
+$$
+\hat{User Score} = 71.587 + 0.867UnitsSold +\varepsilon
+$$
+
+Now, the correlation is pretty high, which suggests that one could explain the units sold by the user scores. However, the relationship seems counter intuitive, and the $R^2$ proves that: it is very small, which means that, although the independent variable is correlated with the dependent variable, the model does not explain almost nothing of the variability of the latter one.
+
+Lets now turn the attention to two models that relate critic scores and units sold:
+
+```{r results = 'asis', echo = FALSE, message=FALSE, warning=FALSE}
+
+
+fit5 <- videogames1 %>% 
+  lm(Critic_Score ~ Units_Sold, data =.)
+
+stargazer(fit5,  
+          title= "Table 3.5. Linear model, Critic Score vs. Units Sold",
+          column.labels = c(""),
+          header = FALSE,
+          font.size = "footnotesize",
+          dep.var.caption = "",
+          dep.var.labels = "Critic Score",
+          covariate.labels = "Units Sold",
+          notes.label = "Significance Value (P-value)",
+          type="latex",
+          table.placement = "!htbp",
+          
+          single.row = T)
+
+```
+
+Unlike the first model (User Score ~ Units Sold), the one above shows a clearly strong and significant correlation between critic scores and units sold. Thus, with a significance level of 99%, it is reasonable to assure that a higher amount of units sold can increase the critic score by an average value of 2.245. The model would look like this:
+
+$$
+\hat{Critic Score}= 69.574+2.245UnitsSold + \varepsilon
+$$
+
+Lets invert the relationship:
+
+```{r results = 'asis', echo = FALSE, message=FALSE, warning=FALSE}
+
+
+fit6 <- videogames1 %>% 
+  lm(Units_Sold ~ Critic_Score, data =.)
+
+stargazer(fit6,  
+          title= "Table 3.6. Linear model, Units Sold vs. Critic Score",
+          column.labels = c(""),
+          header = FALSE,
+          font.size = "footnotesize",
+          dep.var.caption = "",
+          dep.var.labels = "Units Sold",
+          covariate.labels = "Critic Score",
+          notes.label = "Significance Value (P-value)",
+          type="latex",
+          table.placement = "!htbp",
+          
+          single.row = T)
+
+```
+
+Again, a significant estimated coefficient is shown; however, once more it is very small, while the $R^2$ is also expendable:
+
+$$
+\hat{UnitsSold} = -0.634 + 0.013CriticScore + \varepsilon
+$$
+
+For the next model, lets fit both scores to explain the units sold, as follows:
+
+```{r results = 'asis', echo = FALSE, message=FALSE, warning=FALSE}
+
+
+fit7 <- videogames1 %>% 
+  lm(Units_Sold ~ Critic_Score + User_Score, data =.)
+
+stargazer(fit7,  
+          title= "Table 3.7. Linear model, Units Sold vs. Critic Score + User Score",
+          column.labels = c(""),
+          header = FALSE,
+          font.size = "footnotesize",
+          dep.var.caption = "",
+          dep.var.labels = "Units Sold",
+          covariate.labels = c("Critic Score", "User Score"),
+          notes.label = "Significance Value (P-value)",
+          type="latex",
+          table.placement = "!htbp",
+          
+          single.row = T)
+
+```
+
+\newpage
+
+As a general model, this shows that neither score has a practically large impact on units sales (although both are highly significant); additionally, the variance of the dependent variable is almost not explained by the predictive ones. This model would look as follows: 
+
+$$
+\hat{UnitsSold} = -0.514 + 0.016CriticScore + -0.004UserScore + \varepsilon
+$$
+
+Now, a faceting by genre will be made in order to show how both scores relate to the units sold in each case:
+
+```{r message=FALSE, warning=FALSE}
+
+videogames1 %>%
+  filter(Region == "Global") %>%
+  pivot_longer(cols = c(User_Score, Critic_Score), names_to = "Rating_Type",
+                         values_to = "Score") %>%
+  ggplot(aes(x = Score, y = Units_Sold)) + 
+    geom_smooth(aes(color = Rating_Type), method = "lm", se = FALSE) +
+    xlab("User and Critic Scores") +
+    ylab("Units Sold") +
+    labs(title = "Figure 3.4. Linear model, User/Critic Scores vs. Units Sold, \n by genre",
+            caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+    facet_wrap(~ Genre) +
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust= 0))
+
+```
+
+Figure 2.4. shows very meaningful insight about the data: first, in almost all genres (except Misc), Critic Scores display a steeper slope, suggesting a stronger relationship with the units sold (which is consistent with previous results). As a consequence, one can say that games consumers are more influenced by critic scores than by other user's.
+
+Second, some genres depict very weak correlations for both types of scores: adventure, misc and strategy are some of them. Intuitively, games buyers for this games do no take too much into account the game ratings, regardless of whether they come from critics or users. In fact, particular cases shooter games show that user ratings are not correlated at all with units sold, while critic scores display a high slope.
+
+How does this faceting behave under Platform?
+
+```{r message=FALSE, warning=FALSE}
+
+videogames1 %>%
+  filter(Region == "Global") %>%
+  pivot_longer(cols = c(User_Score, Critic_Score), names_to = "Rating_Type",
+                         values_to = "Score") %>%
+  ggplot(aes(x = Score, y = Units_Sold)) + 
+    geom_smooth(aes(color = Rating_Type), method = "lm", se = FALSE) +
+    xlab("User and Critic Scores") +
+    ylab("Units Sold") +
+    labs(title = "Figure 3.5. Linear model, User/Critic Scores vs. Units Sold \n by Platform",
+            caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+    facet_wrap(~ Platform) +
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust= 0))
+
+```
+
+One main insight arises: more platforms have weaker relationships between user or critic scores and units sold. When faceting by genre, the majority of the correlations were clearly and strongly positive; in this case, several platforms show more horizontal slopes (there even are two negatives). Another pattern repeats, where critic scores display a stronger correlation with units sold than the user ones (in all cases, the critic score slope is steeper).
+
+This also assures the previous models where critic scores were more explanatory about the units sold.
+
+Finally, consider a faceting by publisher:
+
+```{r message=FALSE, warning=FALSE}
+
+videogames1 %>%
+  group_by(Publisher) %>%
+  mutate(Publisher = recode(Publisher,
+                            'Electronic Arts' = "EA",
+                            'Namco Bandai Games' = "Namco",
+                            'Take-Two Interactive' = "Take-Two",
+                            'Konami Digital Entertainment' = "Konami",
+                            'Sony Computer Entertainment' = "Sony",
+                            'Warner Bros. Interactive Entertainment' = "Warner Bros.",
+                            'Eidos Interactive' = "Eidos",
+                            'Midway Games' = "Midway",
+                            'Microsoft Game Studios' = "Microsoft",
+                            'Vivendi Games' = "Vivendi")) %>% 
+  filter(n() >= 500 & Region == "Global") %>%
+  pivot_longer(cols = c(User_Score, Critic_Score), names_to = "Rating_Type",
+                         values_to = "Score") %>%
+  ggplot(aes(x = Score, y = Units_Sold)) + 
+    geom_smooth(aes(color = Rating_Type), method = "lm", se = FALSE) +
+    xlab("User and Critic Scores") +
+    ylab("Units Sold") +
+    labs(title = "Figure 3.6. Linear model, User/Critic Scores vs. Units Sold \n by Publisher",
+            caption = "Source: Own elaboration based on the data 'videogames' from kaggle ") +
+    facet_wrap(~ Publisher) +
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust= 0))
+
+
+```
+
+Once more, user scores appear to be less relevant for the consumers' decisions; additionally, critic scores are more explanatory of the units sold than the user scores. In general, both scores show a weak correlation with units sold across a lot of publishers; just some of them (Microsoft, Nintendo, Sony, and Take-Two) display a explicit positive relationship between the variables.
+
+\newpage
+
+# Conclusions
+
+Throughout this document, several data descriptions were made, where insight was gained about the platforms, genres and publisher with more games published. Additionally, some insights about the game genre composition for the top publishers and platforms showed tendencies for some of them to publish more or less games of specific genres.
+
+Furthermore, and not surprisingly, it was revealed that North America and Europe were the regions with the largest game markets, while Japan and the rest of the world represented smaller amount of units sold. It was also shown that certain regions have a preference for some game genres over others.
+
+When fitting linear models to study several relationships between units sold, scores, genres, publishers and platforms, there are two mean conclusions than can be assured:
+
+1. Scores or ratings does partially matter to predict units sold. Specifically, critic scores showed a consistent stronger positive effect to explain it, while user scores displayed a much more inconsistent behavior.
+
+Considering the first hypothesis raised in the Introduction, the models resulted in disparate behaviors between user and critic scores, where the last one consistently appeared more predictive and significant.
+
+One possible explanation for this is that maybe that consumers value more that ratings of the called "experts" rather than the ones of fellow users. 
+
+Speaking of genre, consumers clearly value opinions more in some cases (like Action, Fighting, Platform, Racing, Role-Playing, Shooter and Sports); here something is key: this does not depend of the total amount of units sold by genre within the studied period.
+
+On the contrary, the commercial success for other genres does not depend on neither user nor critic scores. This could mean that consumers of this genres care about a lot of other elements before the ratings.
+
+In terms of platforms, something expected showed up: consumers of the biggest console brands (PlayStation and XBox) did care about critic scores (although not so much about user ones). The one case which represents a major surprise is PC, where user scores explain almost nothing of units sold (the slope is practically horizontal) and the critic scores are lightly positive, but very weak. Since the PC is a huge games market, one could suggest to the game industry to pay attention to another elements other than ratings to sell their game copies. 
+
+In the case of publishers, it was showed how some of them strongly rely on critic scores to sell copies (Activision, EA, Microsoft, Nintendo, Sony and Take-Two). Could this be an indicator that, for this publishers, consumers wait for good reviews on a game to buy it, given bad experiences in the past? This hypothesis would imply that publishers with weak correlations with units sold are more consistent in their game quality. However, that's the direction for future investigations.
+
+2. Therefore, in an aggregate level, one cannot say that scores clearly explain the units sold. The general models fitted, though with significant coefficients, explained a very little amount of the dependent variable variance and the effect of that coefficient was effectively expendable.
+
+However, the rating did explain some cases. It depended. On what? As it was shown, on several variables like the score source, genre, platform and publisher. Surely, there are more than could be used to deepen the analysis, but the scope and objectives of this document are fulfilled. Therefore, the second hypothesis is partially correct, since some variables are in fact positively correlated with units sold, while other are not.
+
+
+\newpage
+
+# References
+
+---
+nocite: | 
+  @edx, @github
+...
+
+<!-- <div id="refs"></div> -->
+
+
+
+
