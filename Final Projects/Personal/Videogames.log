@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 21.1) (preloaded format=pdflatex 2021.2.3)  21 JUL 2021 15:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 21.1) (preloaded format=pdflatex 2021.2.3)  21 JUL 2021 16:12
 entering extended mode
 **./Videogames.tex
 (Videogames.tex
@@ -750,104 +750,103 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 200.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 202.
 [2]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2
-47.
+51.
 (C:\Users\marco\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [3] [4]
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-478.
+492.
 (C:\Users\marco\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<Videogames_files/figure-latex/unnamed-chunk-9-1.pdf, id=69, 469.755pt x 325.21
+<Videogames_files/figure-latex/unnamed-chunk-9-1.pdf, id=70, 469.755pt x 325.21
 5pt>
 File: Videogames_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pd
 f)
 <use Videogames_files/figure-latex/unnamed-chunk-9-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-9-1.pdf  u
-sed on input line 485.
+sed on input line 499.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [5]
-<Videogames_files/figure-latex/unnamed-chunk-11-1.pdf, id=76, 469.755pt x 325.2
+<Videogames_files/figure-latex/unnamed-chunk-11-1.pdf, id=77, 469.755pt x 325.2
 15pt>
 File: Videogames_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-11-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-11-1.pdf  
-used on input line 522.
+used on input line 540.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [6 <./Videogames_files/figure-latex/unnamed-chunk-9-1.pdf>] [7 <./Videogames_fi
 les/figure-latex/unnamed-chunk-11-1.pdf>]
-<Videogames_files/figure-latex/unnamed-chunk-13-1.pdf, id=98, 469.755pt x 325.2
+<Videogames_files/figure-latex/unnamed-chunk-13-1.pdf, id=99, 469.755pt x 325.2
 15pt>
 File: Videogames_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-13-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-13-1.pdf  
-used on input line 586.
+used on input line 606.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Underfull \vbox (badness 1997) detected at line 604
- []
-
 [8 <./Videogames_files/figure-latex/unnamed-chunk-13-1.pdf>]
-<Videogames_files/figure-latex/unnamed-chunk-14-1.pdf, id=109, 469.755pt x 325.
+<Videogames_files/figure-latex/unnamed-chunk-14-1.pdf, id=110, 469.755pt x 325.
 215pt>
 File: Videogames_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-14-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-14-1.pdf  
-used on input line 606.
+used on input line 628.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Underfull \vbox (badness 1609) detected at line 653
+Overfull \vbox (1.37741pt too high) detected at line 677
  []
 
 [9 <./Videogames_files/figure-latex/unnamed-chunk-14-1.pdf>]
-<Videogames_files/figure-latex/unnamed-chunk-15-1.pdf, id=120, 469.755pt x 325.
+<Videogames_files/figure-latex/unnamed-chunk-15-1.pdf, id=121, 469.755pt x 325.
 215pt>
 File: Videogames_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-15-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-15-1.pdf  
-used on input line 655.
+used on input line 679.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[10 <./Videogames_files/figure-latex/unnamed-chunk-15-1.pdf>]
-<Videogames_files/figure-latex/unnamed-chunk-17-1.pdf, id=131, 469.755pt x 325.
+[10] [11 <./Videogames_files/figure-latex/unnamed-chunk-15-1.pdf>]
+<Videogames_files/figure-latex/unnamed-chunk-17-1.pdf, id=138, 469.755pt x 325.
 215pt>
 File: Videogames_files/figure-latex/unnamed-chunk-17-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-17-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-17-1.pdf  
-used on input line 717.
+used on input line 743.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[11]
-<Videogames_files/figure-latex/unnamed-chunk-18-1.pdf, id=139, 469.755pt x 325.
+[12 <./Videogames_files/figure-latex/unnamed-chunk-17-1.pdf>]
+<Videogames_files/figure-latex/unnamed-chunk-18-1.pdf, id=150, 469.755pt x 325.
 215pt>
 File: Videogames_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-18-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-18-1.pdf  
-used on input line 747.
+used on input line 775.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[12 <./Videogames_files/figure-latex/unnamed-chunk-17-1.pdf>]
-<Videogames_files/figure-latex/unnamed-chunk-19-1.pdf, id=151, 469.755pt x 325.
+
+Overfull \vbox (2.20964pt too high) detected at line 792
+ []
+
+[13 <./Videogames_files/figure-latex/unnamed-chunk-18-1.pdf>]
+<Videogames_files/figure-latex/unnamed-chunk-19-1.pdf, id=164, 469.755pt x 325.
 215pt>
 File: Videogames_files/figure-latex/unnamed-chunk-19-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-19-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-19-1.pdf  
-used on input line 764.
+used on input line 794.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[13 <./Videogames_files/figure-latex/unnamed-chunk-18-1.pdf>] [14 <./Videogames
-_files/figure-latex/unnamed-chunk-19-1.pdf>]
+[14 <./Videogames_files/figure-latex/unnamed-chunk-19-1.pdf>]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 784.
+(Font)              <8> on input line 814.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 784.
+(Font)              <6> on input line 814.
 [15]
 <Videogames_files/figure-latex/unnamed-chunk-22-1.pdf, id=191, 469.755pt x 325.
 215pt>
@@ -855,7 +854,7 @@ File: Videogames_files/figure-latex/unnamed-chunk-22-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-22-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-22-1.pdf  
-used on input line 873.
+used on input line 905.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [16 <./Videogames_files/figure-latex/unnamed-chunk-22-1.pdf>]
 <Videogames_files/figure-latex/unnamed-chunk-23-1.pdf, id=202, 469.755pt x 325.
@@ -864,7 +863,7 @@ File: Videogames_files/figure-latex/unnamed-chunk-23-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-23-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-23-1.pdf  
-used on input line 923.
+used on input line 957.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [17] [18 <./Videogames_files/figure-latex/unnamed-chunk-23-1.pdf>]
 <Videogames_files/figure-latex/unnamed-chunk-24-1.pdf, id=223, 469.755pt x 325.
@@ -873,7 +872,7 @@ File: Videogames_files/figure-latex/unnamed-chunk-24-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-24-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-24-1.pdf  
-used on input line 974.
+used on input line 1010.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [19 <./Videogames_files/figure-latex/unnamed-chunk-24-1.pdf>] [20] [21]
 <Videogames_files/figure-latex/unnamed-chunk-30-1.pdf, id=252, 469.755pt x 325.
@@ -882,7 +881,7 @@ File: Videogames_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-30-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-30-1.pdf  
-used on input line 1204.
+used on input line 1242.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [22]
 <Videogames_files/figure-latex/unnamed-chunk-31-1.pdf, id=259, 469.755pt x 325.
@@ -891,10 +890,10 @@ File: Videogames_files/figure-latex/unnamed-chunk-31-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-31-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-31-1.pdf  
-used on input line 1240.
+used on input line 1280.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [23 <./Videogames_files/figure-latex/unnamed-chunk-30-1.pdf>]
-Overfull \vbox (1.95093pt too high) detected at line 1283
+Overfull \vbox (0.44469pt too high) detected at line 1325
  []
 
 [24 <./Videogames_files/figure-latex/unnamed-chunk-31-1.pdf>]
@@ -904,7 +903,7 @@ File: Videogames_files/figure-latex/unnamed-chunk-32-1.pdf Graphic file (type p
 df)
 <use Videogames_files/figure-latex/unnamed-chunk-32-1.pdf>
 Package pdftex.def Info: Videogames_files/figure-latex/unnamed-chunk-32-1.pdf  
-used on input line 1285.
+used on input line 1327.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [25 <./Videogames_files/figure-latex/unnamed-chunk-32-1.pdf>] [26] 
 AED: lastpage setting LastPage
@@ -916,7 +915,7 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  16636 strings out of 479618
  257199 string characters out of 2865027
- 607587 words of memory out of 3000000
+ 606587 words of memory out of 3000000
  33277 multiletter control sequences out of 15000+200000
  478090 words of font info for 149 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -944,7 +943,7 @@ pData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy8.pfb><C:/Users/marco/App
 Data/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtk10.pfb><C:/Users/marco/App
 Data/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/marco/App
 Data/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtti10.pfb>
-Output written on Videogames.pdf (28 pages, 1797618 bytes).
+Output written on Videogames.pdf (28 pages, 1783478 bytes).
 PDF statistics:
  429 PDF objects out of 1000 (max. 8388607)
  70 named destinations out of 1000 (max. 500000)
